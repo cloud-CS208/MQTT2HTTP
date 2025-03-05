@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.35.0 (HEAD)
+  labels:
+    io.kompose.service: fan-device
+  name: fan-device
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: fan-device
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.35.0 (HEAD)
+      labels:
+        io.kompose.service: fan-device
+    spec:
+      containers:
+        - env:
+            - name: MQTT_BROKER
+              value: mosquitto
+            - name: MQTT_PORT
+              value: "1883"
+          image: ashwink07/fan_device:v1.0.0
+          name: fan-device
+      restartPolicy: Always
